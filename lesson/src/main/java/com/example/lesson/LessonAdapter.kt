@@ -35,11 +35,9 @@ class LessonAdapter : RecyclerView.Adapter<LessonAdapter.LessonViewHolder>() {
             setText(R.id.tv_date, lesson.date ?: "日期待定")
             setText(R.id.tv_content, lesson.content);
 
-            val state = lesson.state
-            if (state != null) {
-                setText(R.id.tv_state, state.stateName())
-                var colorRes = R.color.playback
-                colorRes = when (state) {
+            lesson.state?.let {
+                setText(R.id.tv_state, it.stateName())
+                val colorRes = when (it) {
                     Lesson.State.PLAYBACK-> R.color.playback
                     Lesson.State.LIVE-> R.color.live
                     Lesson.State.WAIT-> R.color.wait
@@ -48,6 +46,7 @@ class LessonAdapter : RecyclerView.Adapter<LessonAdapter.LessonViewHolder>() {
                 getView<TextView>(R.id.tv_state)!!.setBackgroundColor(backgroundColor)
             }
         }
+
         companion object {
             fun onCreate(parent:ViewGroup) :LessonViewHolder {
                 return LessonViewHolder(LayoutInflater

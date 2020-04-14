@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.core.BaseView
+import com.example.core.utils.CacheUtils
 import com.example.lesson.entity.Lesson
+import kotlin.reflect.KProperty
 
 class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>, Toolbar.OnMenuItemClickListener {
-    private val lessonPresenter = LessonPresenter(this)
-    override fun getPresenter(): LessonPresenter {
-        return lessonPresenter
+
+    override val presenter: LessonPresenter by lazy {
+        LessonPresenter(this)
     }
 
     private val lessonAdapter = LessonAdapter()
@@ -32,9 +34,9 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>, Toolbar.
         recyclerView.adapter = lessonAdapter
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayout.VERTICAL))
         refreshLayout = findViewById(R.id.swipe_refresh_layout)
-        refreshLayout.setOnRefreshListener { getPresenter().fetchData() }
+        refreshLayout.setOnRefreshListener { presenter.fetchData() }
         refreshLayout.isRefreshing = true
-        getPresenter().fetchData()
+        presenter.fetchData()
     }
 
     fun showResult(lessons: List<Lesson>) {
@@ -43,7 +45,19 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>, Toolbar.
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        getPresenter().showPlayback()
+        presenter.showPlayback()
         return false
+    }
+
+    var token: String by Saver("token")
+
+    class Saver(var name: String) {
+        operator fun getValue(lessonActivity: LessonActivity, property: KProperty<*>): String {
+            return CacheUtils.get(name)!!
+        }
+
+        operator fun setValue(lessonActivity: LessonActivity, property: KProperty<*>, value: String) {
+            CacheUtils.save(name, value)
+        }
     }
 }

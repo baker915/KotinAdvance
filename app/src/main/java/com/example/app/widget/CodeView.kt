@@ -12,35 +12,33 @@ import com.example.app.R
 import com.example.core.utils.dp2px
 import kotlin.random.Random
 
-class CodeView : AppCompatTextView {
-    constructor(context: Context) :this(context, null)
+class CodeView @JvmOverloads constructor(context:Context, attrs:AttributeSet? = null): AppCompatTextView(context, attrs) {
 
-    constructor(context:Context, attrs:AttributeSet?):super(context, attrs) {
+    private val paint = Paint().apply {
+        isAntiAlias = true
+        style = Paint.Style.STROKE
+        color = getContext().getColor(R.color.colorAccent)
+        strokeWidth = 6f.dp2px()
+    }
+
+    private val codeList = arrayOf(
+            "kotlin",
+            "android",
+            "java",
+            "http",
+            "https",
+            "okhttp",
+            "retrofit",
+            "tcp/ip"
+    )
+
+    init {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
         gravity = Gravity.CENTER
         setBackgroundColor(getContext().getColor(R.color.colorPrimary))
         setTextColor(Color.WHITE)
-
-        paint.isAntiAlias = true
-        paint.style = Paint.Style.STROKE
-        paint.color = getContext().getColor(R.color.colorAccent)
-        paint.strokeWidth = dp2px(6f)
-
         updateCode()
     }
-
-    private val paint = Paint()
-
-    private val codeList = arrayOf(
-        "kotlin",
-        "android",
-        "java",
-        "http",
-        "https",
-        "okhttp",
-        "retrofit",
-        "tcp/ip"
-    )
 
     fun updateCode() {
         val random = Random.nextInt(codeList.size)

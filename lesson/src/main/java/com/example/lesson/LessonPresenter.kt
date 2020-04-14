@@ -5,12 +5,12 @@ import com.example.core.http.HttpClient.get
 import com.example.core.utils.Utils.toast
 import com.example.lesson.entity.Lesson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 
 class LessonPresenter {
     companion object {
         const val LESSON_PATH = "lessons"
     }
+
     private var activity:LessonActivity? = null
 
 
@@ -35,12 +35,41 @@ class LessonPresenter {
     }
 
     fun showPlayback() {
-        val playbackLessons: MutableList<Lesson> = ArrayList()
-        for (lesson in lessons) {
-            if (lesson.state === Lesson.State.PLAYBACK) {
-                playbackLessons.add(lesson)
-            }
-        }
-        activity!!.showResult(playbackLessons)
+        activity!!.showResult(lessons.filter { it.state == Lesson.State.PLAYBACK})
     }
+}
+
+fun main() {
+    repeat(10) {
+        println(it)
+    }
+
+    for (i in 0..9) {
+        println(i)
+    }
+
+    for (i in 0 until 10) {
+    }
+
+    for (i in 9 downTo 0) {
+        println(i)
+    }
+    val array = arrayOf(1,23,45,6,78,9)
+
+    array.forEach {
+        println(it)
+    }
+
+    for ((i,j) in array.withIndex()) {
+
+    }
+
+
+
+
+
+
+
+
+
 }
